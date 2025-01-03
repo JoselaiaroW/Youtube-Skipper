@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,11 @@
                 <input 
                     type="text" 
                     id="youtube-url" 
-                    placeholder="Pega el enlace de YouTube aquí..."
-                    aria-label="URL del video de YouTube"
+                    placeholder="Paste the YouTube link here..."
+                    aria-label="YouTube video URL"
                 >
                 <button onclick="loadVideo()" class="primary-button">
-                    Cargar Video
+                    Load Video
                 </button>
             </div>
 
@@ -35,25 +35,25 @@
                         value="10" 
                         min="1" 
                         step="1"
-                        aria-label="Segundos para saltar"
+                        aria-label="Seconds to skip"
                     >
-                    <span class="time-label">Segundos</span>
+                    <span class="time-label">Seconds</span>
                 </div>
                 <div class="button-group">
                     <button onclick="skip(-1)" class="control-button">
-                        <span class="icon">⏪</span> Retroceder
+                        <span class="icon">⏪</span> Rewind
                     </button>
                     <button onclick="skip(1)" class="control-button">
-                        Avanzar <span class="icon">⏩</span>
+                        Fast Forward <span class="icon">⏩</span>
                     </button>
                 </div>
             </div>
 
             <section id="history" class="history-section">
                 <div class="history-header">
-                    <h2>Historial de Videos</h2>
+                    <h2>Video History</h2>
                     <button onclick="clearHistory()" class="secondary-button">
-                        Borrar Historial
+                        Clear History
                     </button>
                 </div>
                 <ul id="history-list"></ul>
