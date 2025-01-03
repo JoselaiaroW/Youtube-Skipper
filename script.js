@@ -61,9 +61,7 @@ function onPlayerStateChange(event) {
 
 // Inicializar controles de teclado
 function initializeKeyboardControls() {
-    // Referencias a los botones
-    const backButton = document.querySelector('button[onclick="skip(-1)"]');
-    const forwardButton = document.querySelector('button[onclick="skip(1)"]');
+    if (!player) return;
 
     document.addEventListener('keydown', function(event) {
         // Solo procesar si el player existe y no estamos en un input
@@ -73,16 +71,14 @@ function initializeKeyboardControls() {
             case 'ArrowLeft':
                 event.preventDefault();
                 skip(-1);
-                // Añadir foco y efecto visual al botón de retroceder
-                backButton.focus();
-                addButtonPressEffect(backButton);
                 break;
             case 'ArrowRight':
                 event.preventDefault();
                 skip(1);
-                // Añadir foco y efecto visual al botón de avanzar
-                forwardButton.focus();
-                addButtonPressEffect(forwardButton);
+                break;
+            case ' ':
+                event.preventDefault();
+                togglePlay();
                 break;
         }
     });
@@ -99,13 +95,46 @@ function addButtonPressEffect(button) {
 // Función para saltar adelante o atrás
 function skip(direction) {
     if (!player) return;
+        
 
     const skipSeconds = parseInt(document.getElementById('skip-time').value, 10) || 5;
     if (isNaN(skipSeconds) || skipSeconds <= 0) return;
 
+    // Referencias a los botones
+    const backButton = document.querySelector('button[onclick="skip(-1)"]');
+    const forwardButton = document.querySelector('button[onclick="skip(1)"]');
+
+    if (direction == 1) {
+        // Añadir foco y efecto visual al botón de avanzar
+        forwardButton.focus();
+        addButtonPressEffect(forwardButton);
+    } else {
+        // Añadir foco y efecto visual al botón de retroceder
+        backButton.focus();
+        addButtonPressEffect(backButton);
+    }
+
+
     const currentTime = player.getCurrentTime();
     const newTime = currentTime + (direction * skipSeconds);
     player.seekTo(newTime, true);
+}
+
+function togglePlay() {
+    if (!player) return;
+
+    const togglePlayButton = document.querySelector('button[onclick="togglePlay()"]');
+
+    const playerState = player.getPlayerState();
+    if (playerState === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        togglePlayButton.textContent = '▶';
+    } else {
+        player.playVideo();
+        togglePlayButton.textContent = '⏸';
+    }
+    togglePlayButton.focus();
+    addButtonPressEffect(togglePlayButton);
 }
 
 // Añadir al historial
