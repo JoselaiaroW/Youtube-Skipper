@@ -21,6 +21,11 @@ function loadVideo() {
         
         // Añadir el video al historial con el título
         addToHistory(url, title);
+        
+        // Esperar un momento para que el iframe se cargue y luego obtener el tiempo actual
+        setTimeout(() => {
+            updateCurrentTime();
+        }, 1000);  // Espera 1 segundo
     } else {
         alert('URL de YouTube no válida.');
     }
@@ -36,13 +41,16 @@ function extractVideoID(url) {
 function skip(direction) {
     const skipSeconds = parseInt(document.getElementById('skip-time').value, 10);  // Solo enteros
     if (iframe) {
+        updateCurrentTime();  // Actualizar el tiempo antes de hacer el salto
+
+        // Realizar el salto (retroceder o avanzar)
         iframe.contentWindow.postMessage(JSON.stringify({
             event: 'command',
             func: 'seekTo',
             args: [currentTime + direction * skipSeconds, true]
         }), '*');
 
-        currentTime += direction * skipSeconds;
+        currentTime += direction * skipSeconds;  // Actualizar la variable currentTime
     }
 }
 
@@ -110,3 +118,36 @@ function clearHistory() {
 
 // Actualizar el historial al cargar la página
 updateHistoryDisplay();
+
+// Función para actualizar la variable currentTime con el tiempo actual del video
+function updateCurrentTime() {
+    if (iframe) {
+        iframe.contentWindow.postMessage(JSON.stringify({
+            event: 'command',
+            func: 'getCurrentTime',
+            args: []
+        }), '*');
+    }
+}
+
+// Recibir el tiempo actual del video
+window.addEventListener('message', function(event) {
+    if (event.origin === 'https://www.youtube.com') {
+        const data = JSON.parse(event.data);
+        if (data.event === 'onStateChange' && data.info === 1) {
+            // El video ha comenzado a reproducirse, actualizar el currentTime
+            iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: 'getCurrentTime',
+                args: []
+            }), '*');
+        } else if (data.info === 2 || data.info === 0) {
+            // El video se ha pausado o detenido, actualizar el currentTime
+            iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: 'getCurrentTime',
+                args: []
+            }), '*');
+        }
+    }
+});
