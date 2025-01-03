@@ -67,19 +67,19 @@ function initializeKeyboardControls() {
         // Solo procesar si el player existe y no estamos en un input
         if (!player || event.target.tagName.toLowerCase() === 'input') return;
 
-        switch(event.key) {
-            case 'ArrowLeft':
-                event.preventDefault();
-                skip(-1);
-                break;
-            case 'ArrowRight':
-                event.preventDefault();
-                skip(1);
-                break;
-            case ' ':
-                event.preventDefault();
-                togglePlay();
-                break;
+        if (event.key == 'ArrowLeft' || event.key == 'j') {
+            event.preventDefault();
+            skip(-1);
+        }
+
+        if (event.key == 'ArrowRight' || event.key == 'l') {
+            event.preventDefault();
+            skip(1);
+        }
+
+        if (event.key == ' ' || event.key == 'k') {
+            event.preventDefault();
+            togglePlay();
         }
     });
 }
