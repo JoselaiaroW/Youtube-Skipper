@@ -1,4 +1,4 @@
-# YouTube Skipper
+# [YouTube Skipper](https://youtube-skipper.vercel.app)
 
 A simple tool to skip parts of YouTube videos like intros, ads, or other sections. It allows you to load a YouTube video, specify how many seconds you want to skip, and control the video with rewind and fast forward buttons.
 
@@ -10,4 +10,4 @@ A simple tool to skip parts of YouTube videos like intros, ads, or other section
 - **Video History**: View and manage a history of previously loaded videos.
 - **Clear History**: Option to clear the video history.
 
-- https://youtube-skipper.vercel.app
+https://youtube-skipper.vercel.app
