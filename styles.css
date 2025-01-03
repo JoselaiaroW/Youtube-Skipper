@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+#video-container {
+    margin-top: 20px;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+#history {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#history ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#history li {
+    margin: 5px 0;
+}
+
+#history a {
+    color: blue;
+    text-decoration: none;
+}
+
+#history a:hover {
+    text-decoration: underline;
+}
+
+button {
+    margin-top: 10px;
+}

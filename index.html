@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Video de YouTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Control de Video de YouTube</h1>
+    <input type="text" id="youtube-url" placeholder="Pega el enlace de YouTube">
+    <button onclick="loadVideo()">Cargar Video</button>
+    
+    <div id="video-container"></div>
+
+    <div class="controls">
+        <input type="number" id="skip-time" value="10" min="1" step="1"> segundos
+        <button onclick="skip(-1)">Retroceder</button>
+        <button onclick="skip(1)">Avanzar</button>
+    </div>
+
+    <div id="history">
+        <h3>Historial de Videos</h3>
+        <ul id="history-list"></ul>
+        <button onclick="clearHistory()">Borrar Historial</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
