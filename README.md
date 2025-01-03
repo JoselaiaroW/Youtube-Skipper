@@ -9,5 +9,3 @@ A simple tool to skip parts of YouTube videos like intros, ads, or other section
 - **Rewind & Fast Forward**: Use buttons to move the video backward or forward.
 - **Video History**: View and manage a history of previously loaded videos.
 - **Clear History**: Option to clear the video history.
-
-https://youtube-skipper.vercel.app
