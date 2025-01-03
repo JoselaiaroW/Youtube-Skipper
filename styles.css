@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 :root {
     --background: #000000;
     --foreground: #ffffff;
@@ -20,11 +22,12 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: var(--background);
     color: var(--foreground);
-    line-height: 1.5;
+    line-height: 1.6; 
     min-height: 100vh;
+    font-size: 1.2rem; 
 }
 
 .container {
@@ -45,35 +48,31 @@ header {
 }
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 800; /* Más negrita para mejor efecto */
+    font-size: 4rem; 
+    font-weight: 800;
     background: linear-gradient(
         to right,
-        #ff1b6b,
-        #ff930f,
-        #fff95b,
-        #45ff9f,
-        #45b7ff,
-        #9945ff,
-        #ff1b6b
+        #0044cc,
+        #003366,
+        #7ac9f7,
+        #1e8ed7,
+        #4c79a8,
+        #2a387b,
+        #0044cc
+        
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: rainbow 4s linear infinite;
+    animation: rainbow 10s alternate infinite;
     margin-bottom: 1rem;
     text-shadow: 0 0 10px rgba(0,0,0,0.1);
-    letter-spacing: -0.5px; /* Espaciado más ajustado tipo Apple */
-}
-
-/* Efecto hover adicional */
-h1:hover {
-    animation: rainbow 2s linear infinite; /* Más rápido en hover */
+    letter-spacing: -0.5px;
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 2rem; /* Aumentamos el tamaño de h2 */
     font-weight: 600;
     color: var(--foreground);
 }
@@ -88,10 +87,11 @@ input {
     background: var(--gray-900);
     border: 1px solid var(--gray-700);
     color: var(--foreground);
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem; /* Aumentamos el padding para hacer los campos más grandes */
     border-radius: var(--radius);
     width: 100%;
     transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 1.2rem; /* Aumentamos el tamaño del texto en los inputs */
 }
 
 input:focus {
@@ -103,15 +103,16 @@ input:focus {
 button {
     border: none;
     border-radius: var(--radius);
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: 1.2rem; /* Aumentamos el tamaño de las letras en los botones */
 }
 
 .primary-button {
     background: var(--accent);
     color: white;
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem; /* Aumentamos el padding para los botones */
 }
 
 .primary-button:hover {
@@ -122,7 +123,7 @@ button {
 .secondary-button {
     background: var(--gray-800);
     color: var(--foreground);
-    padding: 0.5rem 1rem;
+    padding: 1rem 2rem; /* Aumentamos el padding para los botones secundarios */
 }
 
 .secondary-button:hover {
@@ -153,12 +154,14 @@ button {
 }
 
 .time-control input {
-    width: 80px;
+    width: 100px; /* Aumentamos el tamaño del input de control de tiempo */
     text-align: center;
+    font-size: 1.2rem; /* Aumentamos el tamaño del texto en el input */
 }
 
 .time-label {
     color: var(--gray-100);
+    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en las etiquetas */
 }
 
 .button-group {
@@ -169,8 +172,9 @@ button {
 .control-button {
     background: var(--gray-800);
     color: var(--foreground);
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     flex: 1;
+    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en los botones de control */
 }
 
 .control-button:hover {
@@ -180,7 +184,7 @@ button {
 .history-section {
     background: var(--gray-900);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 2rem;
     margin-top: 2rem;
 }
 
@@ -213,11 +217,12 @@ button {
 }
 
 #history-list li {
-    padding: 0.75rem;
-    margin: 0.5rem 0;
+    padding: 1rem; /* Aumentamos el padding de los elementos de la lista */
+    margin: 0.75rem 0;
     background: var(--gray-800);
     border-radius: var(--radius);
     transition: background-color 0.2s;
+    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en los elementos de la lista */
 }
 
 #history-list li:hover {
@@ -228,6 +233,7 @@ button {
     color: var(--foreground);
     text-decoration: none;
     display: block;
+    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en los enlaces */
 }
 
 @media (max-width: 640px) {
@@ -244,6 +250,14 @@ button {
     }
 
     h1 {
-        font-size: 2rem;
+        font-size: 3rem; /* Reducción de tamaño en pantallas pequeñas */
+    }
+
+    h2 {
+        font-size: 2.5rem; /* Reducción de tamaño en pantallas pequeñas */
+    }
+
+    input, button {
+        font-size: 1rem; /* Ajuste del tamaño de los inputs y botones en pantallas pequeñas */
     }
 }
