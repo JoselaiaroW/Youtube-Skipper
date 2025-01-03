@@ -3,26 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Video de YouTube</title>
+    <title>YouTube Skipper</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Control de Video de YouTube</h1>
-    <input type="text" id="youtube-url" placeholder="Pega el enlace de YouTube">
-    <button onclick="loadVideo()">Cargar Video</button>
-    
-    <div id="video-container"></div>
+    <div class="container">
+        <header>
+            <h1>YouTube Skipper</h1>
+        </header>
 
-    <div class="controls">
-        <input type="number" id="skip-time" value="10" min="1" step="1"> segundos
-        <button onclick="skip(-1)">Retroceder</button>
-        <button onclick="skip(1)">Avanzar</button>
-    </div>
+        <main>
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="youtube-url" 
+                    placeholder="Pega el enlace de YouTube aquí..."
+                    aria-label="URL del video de YouTube"
+                >
+                <button onclick="loadVideo()" class="primary-button">
+                    Cargar Video
+                </button>
+            </div>
 
-    <div id="history">
-        <h3>Historial de Videos</h3>
-        <ul id="history-list"></ul>
-        <button onclick="clearHistory()">Borrar Historial</button>
+            <div id="video-container"></div>
+
+            <div class="controls">
+                <div class="time-control">
+                    <input 
+                        type="number" 
+                        id="skip-time" 
+                        value="10" 
+                        min="1" 
+                        step="1"
+                        aria-label="Segundos para saltar"
+                    >
+                    <span class="time-label">segundos</span>
+                </div>
+                <div class="button-group">
+                    <button onclick="skip(-1)" class="control-button">
+                        <span class="icon">⏪</span> Retroceder
+                    </button>
+                    <button onclick="skip(1)" class="control-button">
+                        Avanzar <span class="icon">⏩</span>
+                    </button>
+                </div>
+            </div>
+
+            <section id="history" class="history-section">
+                <div class="history-header">
+                    <h2>Historial de Videos</h2>
+                    <button onclick="clearHistory()" class="secondary-button">
+                        Borrar Historial
+                    </button>
+                </div>
+                <ul id="history-list"></ul>
+            </section>
+        </main>
     </div>
 
     <script src="script.js"></script>

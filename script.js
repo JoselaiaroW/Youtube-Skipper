@@ -1,153 +1,143 @@
-let iframe;
-let currentTime = 0;
-let history = loadHistory();  // Cargar el historial desde localStorage
+let player;
+let history = JSON.parse(localStorage.getItem('history')) || [];
 
-// Cargar el video en el iframe
+// Cargar la API de YouTube
+function loadYouTubeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+// Función que se llama cuando la API está lista
+function onYouTubeIframeAPIReady() {
+    // No crear el player aquí, solo cuando loadVideo sea llamado
+}
+
+// Cargar el video
 function loadVideo() {
     const url = document.getElementById('youtube-url').value;
-    const videoId = extractVideoID(url);
+    const videoId = new URL(url).searchParams.get('v') || url.split('/').pop();
     
-    if (videoId) {
-        const container = document.getElementById('video-container');
-        const iframeHTML = `<iframe id="youtube-iframe" width="640" height="390" 
-            src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1" 
-            frameborder="0" allowfullscreen title="Video de YouTube"></iframe>`;
-        
-        container.innerHTML = iframeHTML;
-        iframe = document.getElementById('youtube-iframe');
-        
-        // Obtener el título del video usando el título del iframe
-        const title = iframe.getAttribute('title');
-        
-        // Añadir el video al historial con el título
-        addToHistory(url, title);
-        
-        // Esperar un momento para que el iframe se cargue y luego obtener el tiempo actual
-        setTimeout(() => {
-            updateCurrentTime();
-        }, 1000);  // Espera 1 segundo
+    if (!videoId) return alert('URL de YouTube no válida.');
+
+    if (player) {
+        // Si ya existe un player, cargar nuevo video
+        player.loadVideoById(videoId);
     } else {
-        alert('URL de YouTube no válida.');
+        // Crear nuevo player
+        player = new YT.Player('video-container', {
+            height: '390',
+            width: '640',
+            videoId: videoId,
+            playerVars: {
+                'playsinline': 1,
+                'autoplay': 1
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+        
+        // Agregar el event listener para las teclas solo una vez
+        if (!window.keyboardControlsInitialized) {
+            initializeKeyboardControls();
+            window.keyboardControlsInitialized = true;
+        }
     }
+
+    addToHistory(url);
 }
 
-// Extraer el ID del video de la URL
-function extractVideoID(url) {
-    const urlObj = new URL(url);
-    return urlObj.searchParams.get('v') || urlObj.pathname.split('/').pop();
+function onPlayerReady(event) {
+    // El player está listo
+    event.target.playVideo();
 }
 
-// Avanzar o retroceder el video
+function onPlayerStateChange(event) {
+    // Puedes manejar cambios de estado aquí si lo necesitas
+}
+
+// Inicializar controles de teclado
+function initializeKeyboardControls() {
+    // Referencias a los botones
+    const backButton = document.querySelector('button[onclick="skip(-1)"]');
+    const forwardButton = document.querySelector('button[onclick="skip(1)"]');
+
+    document.addEventListener('keydown', function(event) {
+        // Solo procesar si el player existe y no estamos en un input
+        if (!player || event.target.tagName.toLowerCase() === 'input') return;
+
+        switch(event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                skip(-1);
+                // Añadir foco y efecto visual al botón de retroceder
+                backButton.focus();
+                addButtonPressEffect(backButton);
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                skip(1);
+                // Añadir foco y efecto visual al botón de avanzar
+                forwardButton.focus();
+                addButtonPressEffect(forwardButton);
+                break;
+        }
+    });
+}
+
+// Función para añadir efecto visual al botón
+function addButtonPressEffect(button) {
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        button.style.transform = 'scale(1)';
+    }, 100);
+}
+
+// Función para saltar adelante o atrás
 function skip(direction) {
-    const skipSeconds = parseInt(document.getElementById('skip-time').value, 10);  // Solo enteros
-    if (iframe) {
-        updateCurrentTime();  // Actualizar el tiempo antes de hacer el salto
+    if (!player) return;
 
-        // Realizar el salto (retroceder o avanzar)
-        iframe.contentWindow.postMessage(JSON.stringify({
-            event: 'command',
-            func: 'seekTo',
-            args: [currentTime + direction * skipSeconds, true]
-        }), '*');
+    const skipSeconds = parseInt(document.getElementById('skip-time').value, 10) || 5;
+    if (isNaN(skipSeconds) || skipSeconds <= 0) return;
 
-        currentTime += direction * skipSeconds;  // Actualizar la variable currentTime
-    }
+    const currentTime = player.getCurrentTime();
+    const newTime = currentTime + (direction * skipSeconds);
+    player.seekTo(newTime, true);
 }
 
-// Detectar las teclas de flecha y avanzar o retroceder
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
-        skip(1);  // Avanzar
-    } else if (event.key === 'ArrowLeft') {
-        skip(-1);  // Retroceder
-    }
-});
-
-// Función para agregar un video al historial
-function addToHistory(url, title) {
-    // Evitar duplicados en el historial
-    if (!history.some(item => item.url === url)) {
-        history.push({ url, title });
-        saveHistory();  // Guardar en localStorage
+// Añadir al historial
+function addToHistory(url) {
+    if (!history.includes(url)) {
+        history.push(url);
+        localStorage.setItem('history', JSON.stringify(history));
         updateHistoryDisplay();
     }
 }
 
-// Función para actualizar la visualización del historial
+// Mostrar historial
 function updateHistoryDisplay() {
-    const historyList = document.getElementById('history-list');
-    historyList.innerHTML = '';  // Limpiar historial actual
-
-    // Mostrar los videos en el historial
-    history.forEach((video) => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = "#";
-        link.textContent = `Ver video: ${video.title}`;
-        link.onclick = function () {
-            loadVideoByUrl(video.url);
-        };
-        listItem.appendChild(link);
-        historyList.appendChild(listItem);
-    });
+    const list = document.getElementById('history-list');
+    list.innerHTML = history.map(url => 
+        `<li><a href="#" onclick="loadVideoByUrl('${url}'); return false;">Ver video</a></li>`
+    ).join('');
 }
 
-// Cargar un video del historial al hacer clic
+// Cargar video desde historial
 function loadVideoByUrl(url) {
     document.getElementById('youtube-url').value = url;
     loadVideo();
 }
 
-// Guardar el historial en localStorage
-function saveHistory() {
-    localStorage.setItem('youtube-history', JSON.stringify(history));
-}
-
-// Cargar el historial desde localStorage
-function loadHistory() {
-    const savedHistory = localStorage.getItem('youtube-history');
-    return savedHistory ? JSON.parse(savedHistory) : [];
-}
-
-// Función para borrar el historial
+// Borrar historial
 function clearHistory() {
-    history = [];  // Vaciar el arreglo de historial
-    saveHistory();  // Guardar el historial vacío en localStorage
-    updateHistoryDisplay();  // Actualizar la visualización del historial
+    history = [];
+    localStorage.setItem('history', JSON.stringify(history));
+    updateHistoryDisplay();
 }
 
-// Actualizar el historial al cargar la página
+// Inicializar
+loadYouTubeAPI();
 updateHistoryDisplay();
-
-// Función para actualizar la variable currentTime con el tiempo actual del video
-function updateCurrentTime() {
-    if (iframe) {
-        iframe.contentWindow.postMessage(JSON.stringify({
-            event: 'command',
-            func: 'getCurrentTime',
-            args: []
-        }), '*');
-    }
-}
-
-// Recibir el tiempo actual del video
-window.addEventListener('message', function(event) {
-    if (event.origin === 'https://www.youtube.com') {
-        const data = JSON.parse(event.data);
-        if (data.event === 'onStateChange' && data.info === 1) {
-            // El video ha comenzado a reproducirse, actualizar el currentTime
-            iframe.contentWindow.postMessage(JSON.stringify({
-                event: 'command',
-                func: 'getCurrentTime',
-                args: []
-            }), '*');
-        } else if (data.info === 2 || data.info === 0) {
-            // El video se ha pausado o detenido, actualizar el currentTime
-            iframe.contentWindow.postMessage(JSON.stringify({
-                event: 'command',
-                func: 'getCurrentTime',
-                args: []
-            }), '*');
-        }
-    }
-});
