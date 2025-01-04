@@ -155,6 +155,7 @@ button {
     
     /* Eliminamos cualquier personalización de apariencia */
     -webkit-appearance: none;
+    appearance: none;
     -moz-appearance: textfield;
 }
 
