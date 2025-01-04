@@ -147,21 +147,31 @@ button {
     margin: 2rem 0;
 }
 
-.time-control {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.time-control input[type=number] {
+    width: 120px;
+    text-align: center;
+    font-size: 2rem;
+    padding: 0.5rem;
+    
+    /* Eliminamos cualquier personalización de apariencia */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 }
 
-.time-control input {
-    width: 100px; /* Aumentamos el tamaño del input de control de tiempo */
-    text-align: center;
-    font-size: 1.2rem; /* Aumentamos el tamaño del texto en el input */
+/* Restauramos específicamente los controles de spinner */
+.time-control input[type=number]::-webkit-outer-spin-button,
+.time-control input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 50%;
+    opacity: 1;
+    position: relative;
 }
 
 .time-label {
     color: var(--gray-100);
-    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en las etiquetas */
+    font-size: 1.5rem; /* Aumentamos el tamaño de la fuente en las etiquetas */
 }
 
 .button-group {
@@ -174,7 +184,7 @@ button {
     color: var(--foreground);
     padding: 1rem 2rem;
     flex: 1;
-    font-size: 1.2rem; /* Aumentamos el tamaño de la fuente en los botones de control */
+    font-size: 2rem; /* Aumentamos el tamaño de la fuente en los botones de control */
 }
 
 .control-button:hover {
@@ -260,4 +270,23 @@ button {
     input, button {
         font-size: 1rem; /* Ajuste del tamaño de los inputs y botones en pantallas pequeñas */
     }
+}
+
+footer {
+    color: #555555;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    a {
+        color: #666666;
+        text-decoration: none;
+    }
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

@@ -27,8 +27,8 @@ function loadVideo() {
     } else {
         // Crear nuevo player
         player = new YT.Player('video-container', {
-            height: '390',
-            width: '640',
+            height: '600',
+            width: '800',
             videoId: videoId,
             playerVars: {
                 'playsinline': 1,
@@ -63,6 +63,8 @@ function onPlayerStateChange(event) {
 function initializeKeyboardControls() {
     if (!player) return;
 
+    skipTime = document.getElementById('skip-time');
+
     document.addEventListener('keydown', function(event) {
         // Solo procesar si el player existe y no estamos en un input
         if (!player || event.target.tagName.toLowerCase() === 'input') return;
@@ -81,6 +83,21 @@ function initializeKeyboardControls() {
             event.preventDefault();
             togglePlay();
         }
+
+        if (event.key == ' ' || event.key == 'k') {
+            event.preventDefault();
+            togglePlay();
+        }
+
+        if (event.key == 'ArrowUp') {
+            event.preventDefault();
+            skipTime.value = parseInt(skipTime.value, 10) + 1;
+        }
+
+        if (event.key == 'ArrowDown') {
+            event.preventDefault();
+            skipTime.value = parseInt(skipTime.value, 10) - 1;
+        }
     });
 }
 
@@ -95,7 +112,6 @@ function addButtonPressEffect(button) {
 // Función para saltar adelante o atrás
 function skip(direction) {
     if (!player) return;
-        
 
     const skipSeconds = parseInt(document.getElementById('skip-time').value, 10) || 5;
     if (isNaN(skipSeconds) || skipSeconds <= 0) return;
@@ -113,7 +129,6 @@ function skip(direction) {
         backButton.focus();
         addButtonPressEffect(backButton);
     }
-
 
     const currentTime = player.getCurrentTime();
     const newTime = currentTime + (direction * skipSeconds);
