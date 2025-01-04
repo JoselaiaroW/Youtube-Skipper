@@ -150,7 +150,7 @@ function addToHistory(url) {
 function updateHistoryDisplay() {
     const list = document.getElementById('history-list');
     list.innerHTML = history.map(url => 
-        `<li><a href="#" onclick="loadVideoByUrl('${url}'); return false;">Ver video</a></li>`
+        `<li><a href="#" onclick="loadVideoByUrl('${url}'); return false;">${url}</a></li>`
     ).join('');
 }
 
