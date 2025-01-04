@@ -9,11 +9,6 @@ function loadYouTubeAPI() {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
-// Función que se llama cuando la API está lista
-function onYouTubeIframeAPIReady() {
-    // No crear el player aquí, solo cuando loadVideo sea llamado
-}
-
 // Cargar el video
 function loadVideo() {
     const url = document.getElementById('youtube-url').value;
@@ -35,8 +30,7 @@ function loadVideo() {
                 'autoplay': 1
             },
             events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+                'onReady': onPlayerReady
             }
         });
         
@@ -53,10 +47,6 @@ function loadVideo() {
 function onPlayerReady(event) {
     // El player está listo
     event.target.playVideo();
-}
-
-function onPlayerStateChange(event) {
-    // Puedes manejar cambios de estado aquí si lo necesitas
 }
 
 // Inicializar controles de teclado
